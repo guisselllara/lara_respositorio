@@ -1,0 +1,3 @@
+# 5. Imprime el resultado de 5 + 3.
+
+print(5 + 3)
