@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/03 Pc Lab 2/Desktop/guissel_sql/lara_sql/nortwin.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2098"/><column_width id="4" width="0"/><expanded_item id="0" parent="0"/><expanded_item id="1" parent="0"/><expanded_item id="2" parent="0"/><expanded_item id="3" parent="0"/><expanded_item id="4" parent="0"/><expanded_item id="5" parent="0"/><expanded_item id="6" parent="0"/><expanded_item id="7" parent="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Categories" custom_title="0" dock_id="2" table="4,10:mainCategories"/><dock_state state="000000ff00000000fd00000001000000020000038a00000251fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000000003cf0000000000000000fb000000160064006f0063006b00420072006f007700730065003201000000000000038a0000013200ffffff0000038a0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Categories" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="82"/><column index="2" value="119"/><column index="3" value="300"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 4">--Usar la funcion SUM para calcular el total de precios de la tabla Products
-SELECT SUM(Price) AS Total_price FROM Products
-
---Usar la funcion MAX para mostrar el precio mas alto junto al nombre de ese producto de la tabla Products
-SELECT ProductName, Price
-FROM Products
-WHERE Price=(SELECT MAX(price)FROM Products);
-
---Usar la funcion MIN para mostrar el precio mas bajo junto al nombre de ese producto de la tabla Products
-SELECT ProductName, Price
-FROM Products
-WHERE Price=(SELECT MIN(price)FROM Products);
-
---Utilizar una consulta que muestre los nombres que empiecen con 'D' Y terminen en 'o'
-SELECT * FROM Employees
-WHERE LastName like 'D%O'
-
---Utiliza una consulta que muestre los apellidos que tengan un tamaño de 4 caracteres y terminen con 'c'
-SELECT *
-FROM Employees
-WHERE LastName LIKE &quot;_____a&quot;
-
---Realizar una consulta que muestre el promedio de cantidades vendidas por ID de productos OrderDetails
-SELECT ProductID, avg(Quantity)
-FROM OrderDetails
-GROUP by ProductID
-
---Realizar una consulta que muestre el total de cantidades vendidas por ID ordenes,
---antes de eso se necesita, trabajar unicamente con los ID de ordenes de detalles entre 0 y 40
-SELECT ProductID, sum (Quantity)
-FROM OrderDetails
-GROUP by ProductID
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/03 Pc Lab 2/Desktop/guissel_sql/lara_sql/nortwin.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2098"/><column_width id="4" width="0"/><expanded_item id="0" parent="0"/><expanded_item id="1" parent="0"/><expanded_item id="2" parent="0"/><expanded_item id="3" parent="0"/><expanded_item id="4" parent="0"/><expanded_item id="5" parent="0"/><expanded_item id="6" parent="0"/><expanded_item id="7" parent="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Categories" custom_title="0" dock_id="2" table="4,10:mainCategories"/><dock_state state="000000ff00000000fd00000001000000020000038a00000251fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000000003cf0000000000000000fb000000160064006f0063006b00420072006f007700730065003201000000000000038a0000013200ffffff0000038a0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Categories" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="82"/><column index="2" value="119"/><column index="3" value="300"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 4">--Usar la funcion SUM para calcular el total de precios de la tabla Products
+SELECT SUM(Price) AS Total_price FROM Products
+
+--Usar la funcion MAX para mostrar el precio mas alto junto al nombre de ese producto de la tabla Products
+SELECT ProductName, Price
+FROM Products
+WHERE Price=(SELECT MAX(price)FROM Products);
+
+--Usar la funcion MIN para mostrar el precio mas bajo junto al nombre de ese producto de la tabla Products
+SELECT ProductName, Price
+FROM Products
+WHERE Price=(SELECT MIN(price)FROM Products);
+
+--Utilizar una consulta que muestre los nombres que empiecen con 'D' Y terminen en 'o'
+SELECT * FROM Employees
+WHERE LastName like 'D%O'
+
+--Utiliza una consulta que muestre los apellidos que tengan un tamaño de 4 caracteres y terminen con 'c'
+SELECT *
+FROM Employees
+WHERE LastName LIKE &quot;_____a&quot;
+
+--Realizar una consulta que muestre el promedio de cantidades vendidas por ID de productos OrderDetails
+SELECT ProductID, avg(Quantity)
+FROM OrderDetails
+GROUP by ProductID
+
+--Realizar una consulta que muestre el total de cantidades vendidas por ID ordenes,
+--antes de eso se necesita, trabajar unicamente con los ID de ordenes de detalles entre 0 y 40
+SELECT ProductID, sum (Quantity)
+FROM OrderDetails
+GROUP by ProductID
 HAVING Quantity BETWEEN 0 and 40</sql><sql name="SQL 10">--Mostrar los clientes que sean de la ciudad de mexico, londres o belice
 SELECT * FROM customers
 WHERE City IN ( 'London', 'Mexico')
@@ -318,66 +318,73 @@ JOIN Categories cat ON p.CategoryID = cat.CategoryID
 GROUP BY cat.CategoryName
 HAVING TotalSales &gt; 5000; .
 
-</sql><sql name="SQL 5*">SELECT  CategoryID, ProductName,
-(SELECT CategoryName FROM categories WHERE Products.CategoryID=CategoryID) as nombre_categoria,
-sum(price) as Total_por_categoria
-FROM Products
-WHERE SupplierID BETWEEN 0 AND 10 GROUP BY CategoryID
-having total_por_categoria BETWEEN 100 and 300
-ORDER BY CategoryID DESC
+</sql><sql name="SQL 5*">SELECT  CategoryID, ProductName,
+(SELECT CategoryName FROM categories WHERE Products.CategoryID=CategoryID) as nombre_categoria,
+sum(price) as Total_por_categoria
+FROM Products
+WHERE SupplierID BETWEEN 0 AND 10 GROUP BY CategoryID
+having total_por_categoria BETWEEN 100 and 300
+ORDER BY CategoryID DESC
+
+SELECT CategoryID, ProductName
+FROM Products
+
+select * from Categories
+
+--Realizar una consulta que permita mostrar el promedio de cantidades vendidas por id de productos,
+--Ademas unicamente debe trabajar con los id de las ordenes de detalles 1,4,5,6,7,10,22,11,24 у 35
+--Finalmente agrupe los campos y muestre las cantidades que unicamente
+--Se encuentren en el rango de 5-30 y ordene de forma DESC a traves del campo del cual saco el promedio.
+
+SELECT ProductID, PromedioCantidad
+FROM (
+SELECT ProductID, AVG(Quantity) AS PromedioCantidad
+FROM OrderDetails
+WHERE OrderDetailID IN (1, 4, 5, 6, 7, 10, 22, 11, 24, 35)
+GROUP BY ProductID
+) AS Subconsulta
+WHERE PromedioCantidad BETWEEN 5 AND 30
+ORDER BY PromedioCantidad DESC;
 
-SELECT CategoryID, ProductName
-FROM Products
-
-select * from Categories
-
---Realizar una consulta que permita mostrar el promedio de cantidades vendidas por id de productos,
---Ademas unicamente debe trabajar con los id de las ordenes de detalles 1,4,5,6,7,10,22,11,24 у 35
---Finalmente agrupe los campos y muestre las cantidades que unicamente
---Se encuentren en el rango de 5-30 y ordene de forma DESC a traves del campo del cual saco el promedio.
-
-SELECT ProductID, PromedioCantidad
-FROM (
-SELECT ProductID, AVG(Quantity) AS PromedioCantidad
+SELECT ProductID, avg(Quantity) as promedio_de_cantidad
 FROM OrderDetails
-WHERE OrderDetailID IN (1, 4, 5, 6, 7, 10, 22, 11, 24, 35)
+WHERE OrderDetailID IN(1,4,5,6,7,10,22,11,24,35)
 GROUP BY ProductID
-) AS Subconsulta
-WHERE PromedioCantidad BETWEEN 5 AND 30
-ORDER BY PromedioCantidad DESC;
-
---Realizar una consulta que muestre las fechas de las ordenes
---realizadas por clientes, se necesita que los datos mostrados
---Se liminten a las ordenes que id (10248,10250,10260,10270,10249,10251)
---Ordene de forma  desc por employeed
-SELECT OrderID, OrderDate, EmployeeID
-FROM Orders
-WHERE OrderID IN (
-SELECT OrderID 
-FROM Orders 
-WHERE OrderID IN (10248, 10250, 10260, 10270, 10249, 10251)
-)
-ORDER BY EmployeeID DESC;
-
-
---Crear una consulta que permita mostrar el total de cantidades vendidad
---por ProductID, ademas se necesita saber el nombre del producto 
---limite a que unicamente  se muestren la informacion de los id de Las
---ordenes entre (10248 y 10280 y 10300 y 10400)
---mostrar las cantidades vendidas mayores a 30 
---Ordene de forma DESC por producto id
-SELECT od.ProductID, p.ProductName,
-sum(od.Quantity) AS TotalCantidadVendida
-FROM OrderDetails od
-JOIN Products p ON od.ProductID = p.ProductID
-WHERE od.OrderID IN 
-(SELECT OrderID
-FROM Orders
-WHERE (OrderID BETWEEN 10248 and 10280)
-OR (OrderID BETWEEN 10300 and 10400)
-)
-GROUP BY od.ProductID, p.ProductName
-HAVING TotalCantidadVendida &gt; 30
-ORDER BY od.ProductID DESC;
-
+HAVING Quantity BETWEEN 5 AND 30
+ORDER BY promedio_de_cantidad DESC
+
+--Realizar una consulta que muestre las fechas de las ordenes
+--realizadas por clientes, se necesita que los datos mostrados
+--Se liminten a las ordenes que id (10248,10250,10260,10270,10249,10251)
+--Ordene de forma  desc por employeed
+SELECT OrderID, OrderDate, EmployeeID
+FROM Orders
+WHERE OrderID IN (
+SELECT OrderID 
+FROM Orders 
+WHERE OrderID IN (10248, 10250, 10260, 10270, 10249, 10251)
+)
+ORDER BY EmployeeID DESC;
+
+
+--Crear una consulta que permita mostrar el total de cantidades vendidad
+--por ProductID, ademas se necesita saber el nombre del producto 
+--limite a que unicamente  se muestren la informacion de los id de Las
+--ordenes entre (10248 y 10280 y 10300 y 10400)
+--mostrar las cantidades vendidas mayores a 30 
+--Ordene de forma DESC por producto id
+SELECT od.ProductID, p.ProductName,
+sum(od.Quantity) AS TotalCantidadVendida
+FROM OrderDetails od
+JOIN Products p ON od.ProductID = p.ProductID
+WHERE od.OrderID IN 
+(SELECT OrderID
+FROM Orders
+WHERE (OrderID BETWEEN 10248 and 10280)
+OR (OrderID BETWEEN 10300 and 10400)
+)
+GROUP BY od.ProductID, p.ProductName
+HAVING TotalCantidadVendida &gt; 30
+ORDER BY od.ProductID DESC;
+
 </sql><current_tab id="3"/></tab_sql></sqlb_project>
