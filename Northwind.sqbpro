@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/03 Pc Lab 2/Desktop/guissel_sql/lara_sql/nortwin.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2098"/><column_width id="4" width="0"/><expanded_item id="0" parent="0"/><expanded_item id="1" parent="0"/><expanded_item id="2" parent="0"/><expanded_item id="3" parent="0"/><expanded_item id="4" parent="0"/><expanded_item id="5" parent="0"/><expanded_item id="6" parent="0"/><expanded_item id="7" parent="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Categories" custom_title="0" dock_id="2" table="4,10:mainCategories"/><dock_state state="000000ff00000000fd00000001000000020000038a00000251fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000000003cf0000000000000000fb000000160064006f0063006b00420072006f007700730065003201000000000000038a0000011700ffffff0000038a0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Categories" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="82"/><column index="2" value="119"/><column index="3" value="300"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">--Subconsultas
+--1 Obtener los nombres de los productos cuya categoría sea 'Beverages'
+SELECT ProductName 
+FROM Products 
+WHERE CategoryID = (
+SELECT CategoryID 
+FROM Categories 
+WHERE CategoryName = 'Beverages'
+);
+
+--2 Listar los clientes que han realizado pedidos
+SELECT CustomerName 
+FROM Customers 
+WHERE CustomerID IN (
+SELECT DISTINCT CustomerID 
+FROM Orders
+);
+ 
+--3 Mostrar los nombres de los empleados que han gestionado pedidos
+SELECT FirstName || ' ' || LastName AS EmpleadoNombre
+FROM Employees
+WHERE EmployeeID IN (
+SELECT DISTINCT EmployeeID FROM Orders
+);
+
+--4 Encontrar los nombres de los productos que tienen un precio 
+--mayor al precio promedio de todos los productos.
+SELECT ProductName, Price
+FROM Products
+WHERE Price &gt; (
+SELECT AVG(Price) FROM Products
+);
+
+--5 Listar los nombres de los clientes que han realizado pedidos en 1997.
+SELECT CustomerName
+FROM Customers
+WHERE CustomerID IN (
+SELECT DISTINCT CustomerID 
+FROM Orders
+WHERE strftime('%Y', OrderDate) = '1997'
+);
+
+--6 Obtener los nombres de los proveedores que suministran productos en la categoría 'Confections'.
+SELECT SupplierName
+FROM Suppliers
+WHERE SupplierID IN (
+SELECT DISTINCT SupplierID
+FROM Products
+WHERE CategoryID = (
+SELECT CategoryID FROM Categories WHERE CategoryName = 'Confections'
+    )
+);
+
+--7 Mostrar los productos que pertenecen a la misma categoría que 'Chocolade'.
+SELECT ProductName
+FROM Products
+WHERE CategoryID = (
+SELECT CategoryID FROM Products WHERE ProductName = 'Chocolade'
+);
+
+--8 Listar los empleados que tienen el mismo apellido que otro empleado.
+SELECT FirstName, LastName
+FROM Employees
+WHERE LastName IN (
+SELECT LastName
+FROM Employees
+GROUP BY LastName
+HAVING COUNT(*) &gt; 1
+);
+
+--9 Obtener los nombres de los clientes que han comprado el producto más caro.
+SELECT CustomerName
+FROM Customers c
+WHERE c.CustomerID IN (
+SELECT DISTINCT o.CustomerID
+FROM Orders o
+WHERE o.CustomerID IN (
+SELECT o.CustomerID
+FROM OrderDetails od
+WHERE od.OrderID = o.OrderID
+AND od.ProductID = (
+SELECT ProductID
+FROM Products
+ORDER BY Price DESC
+LIMIT 1
+          )
+    )
+);
+
+--10 Mostrar los productos cuyo proveedor esté en la misma ciudad que algún cliente.
+SELECT ProductName
+FROM Products
+WHERE SupplierID IN (
+SELECT SupplierID FROM Suppliers
+WHERE City IN (SELECT City FROM Customers)
+);
+
+--Subconsultas con funciones de agregación, GROUP BY y HAVING
+--1 Obtener la cantidad de pedidos realizados por cada cliente.
+SELECT CustomerID, COUNT(OrderID) AS TotalPedidos
+FROM Orders
+GROUP BY CustomerID;
+
+--2 Listar las categorías con más de 10 productos.
+SELECT CategoryID, COUNT(ProductID) AS TotalProductos
+FROM Products
+GROUP BY CategoryID
+HAVING COUNT(ProductID) &gt; 10;
+
+--3 Mostrar los empleados que han procesado más de 50 pedidos.
+SELECT EmployeeID, COUNT(OrderID) AS TotalPedidos
+FROM Orders
+GROUP BY EmployeeID
+HAVING COUNT(OrderID) &gt; 50;
+
+--4 Listar los productos cuyo precio es mayor que el precio promedio de su categoría.
+SELECT ProductName, Price, CategoryID
+FROM Products p
+WHERE Price &gt; (
+SELECT AVG(Price)
+FROM Products
+WHERE CategoryID = p.CategoryID
+);
+
+--5 Mostrar los clientes que han realizado más de 5 pedidos.
+SELECT CustomerID, COUNT(OrderID) AS TotalPedidos
+FROM Orders
+GROUP BY CustomerID
+HAVING COUNT(OrderID) &gt; 5;
+
+--6 Obtener los nombres de los productos más vendidos.
+SELECT ProductID, SUM(Quantity) AS TotalVendido
+FROM OrderDetails
+GROUP BY ProductID
+HAVING SUM(Quantity) = (
+SELECT MAX(Total)
+FROM (
+SELECT SUM(Quantity) AS Total
+FROM OrderDetails
+GROUP BY ProductID
+    ) AS Subconsulta
+);
+
+--7 Mostrar las ciudades donde hay más de 5 clientes.
+SELECT City, COUNT(CustomerID) AS TotalClientes
+FROM Customers
+GROUP BY City
+HAVING COUNT(CustomerID) &gt; 5;
+
+--8 Obtener los proveedores que suministran más de 3 productos.
+SELECT SupplierID, COUNT(ProductID) AS TotalProductos
+FROM Products
+GROUP BY SupplierID
+HAVING COUNT(ProductID) &gt; 3;
+
+--9 Listar los empleados cuyo número de pedidos gestionados supera el promedio.
+SELECT EmployeeID, COUNT(OrderID) AS TotalPedidos
+FROM Orders
+GROUP BY EmployeeID
+HAVING COUNT(OrderID) &gt; (
+SELECT AVG(Total)
+FROM (
+SELECT COUNT(OrderID) AS Total
+FROM Orders
+GROUP BY EmployeeID
+    ) AS Subconsulta
+);
+
+--10 Mostrar las categorías de productos cuyo precio promedio es mayor a 20.
+SELECT CategoryID, AVG(Price) AS PrecioPromedio
+FROM Products
+GROUP BY CategoryID
+HAVING AVG(Price) &gt; 20;
+
+--Subconsultas con WHERE además de lo anterior
+--1 Listar los clientes que han realizado más de 5 pedidos y son de Alemania.
+SELECT CustomerID, CustomerName, Country
+FROM Customers
+WHERE Country = 'Germany'
+AND CustomerID IN (
+SELECT CustomerID
+FROM Orders
+GROUP BY CustomerID
+HAVING COUNT(OrderID) &gt; 5
+);
+
+--2. Obtener los productos cuyo precio es mayor al promedio de su categoría 
+--y pertenecen a 'Seafood'.
+SELECT ProductName, Price, CategoryID
+FROM Products
+WHERE Price &gt; (
+SELECT AVG(Price)
+FROM Products
+WHERE CategoryID = Products.CategoryID
+)
+AND CategoryID = (
+SELECT CategoryID
+FROM Categoriesss
+WHERE CategoryName = 'Seafood'
+);
+
+--3 Mostrar los empleados que han gestionado pedidos después de 1996.
+SELECT EmployeeID, FirstName, LastName
+FROM Employees
+WHERE EmployeeID IN (
+SELECT DISTINCT EmployeeID
+FROM Orders
+WHERE strftime('%Y', OrderDate) &gt; '1996'
+);
+
+--4 Obtener los clientes que han realizado pedidos antes de 1995.
+SELECT CustomerID, CustomerName
+FROM Customers
+WHERE CustomerID IN (
+SELECT DISTINCT CustomerID
+FROM Orders
+WHERE strftime('%Y', OrderDate) &lt; '1995'
+);
+
+--5 Mostrar los productos vendidos en más de 10 pedidos y cuyo precio es superior a 30.
+SELECT ProductID, ProductName, Price
+FROM Products
+WHERE Price &gt; 30
+AND ProductID IN (
+SELECT ProductID
+FROM OrderDetails
+GROUP BY ProductID
+HAVING COUNT(DISTINCT OrderID) &gt; 10
+);
+
+--6 Listar los clientes con más de 3 pedidos en 'UK'.
+SELECT CustomerID, CustomerName, Country
+FROM Customers
+WHERE Country = 'UK'
+AND CustomerID IN (
+SELECT CustomerID
+FROM Orders
+GROUP BY CustomerID
+HAVING COUNT(OrderID) &gt; 3
+);
+
+--7 Mostrar los empleados que han gestionado pedidos para clientes de 'France'.
+SELECT EmployeeID, FirstName, LastName
+FROM Employees
+WHERE EmployeeID IN (
+SELECT DISTINCT EmployeeID
+FROM Orders
+WHERE CustomerID IN (
+SELECT CustomerID
+FROM Customers
+WHERE Country = 'France'
+    )
+);
+
+--8 Obtener los proveedores que suministran productos cuyo precio supera el promedio.
+SELECT SupplierID, SupplierName
+FROM Suppliers
+WHERE SupplierID IN (
+SELECT DISTINCT SupplierID
+FROM Products
+WHERE Price &gt; (
+SELECT AVG(Price) FROM Products
+    )
+);
+
+--9 Mostrar las categorías de productos cuyos productos cuestan más de 15.
+SELECT CategoryID, CategoryName
+FROM Categories
+WHERE CategoryID IN (
+SELECT DISTINCT CategoryID
+FROM Products
+WHERE Price &gt; 15
+);
+
+--10 Listar los productos con precio superior al promedio y que sean de la categoría 1 o 2.
+SELECT ProductID, ProductName, Price, CategoryID
+FROM Products
+WHERE Price &gt; (
+SELECT AVG(Price) FROM Products
+)
+AND CategoryID IN (1, 2);
+
+
+--Subconsultas con BETWEEN, IN además de lo anterior
+--1 Listar los pedidos realizados entre 1995 y 1997 por clientes de 'USA'.
+SELECT OrderID, CustomerID, OrderDate
+FROM Orders
+WHERE strftime('%Y', OrderDate) BETWEEN '1995' AND '1997'
+AND CustomerID IN (
+SELECT CustomerID FROM Customers WHERE Country = 'USA'
+);
+
+--2 Obtener los empleados cuyos pedidos han sido realizados en 1998.
+SELECT EmployeeID, FirstName, LastName
+FROM Employees
+WHERE EmployeeID IN (
+SELECT DISTINCT EmployeeID
+FROM Orders
+WHERE strftime('%Y', OrderDate) = '1998'
+);
+
+--3 Mostrar los clientes que han realizado pedidos en los meses de enero y febrero.
+SELECT CustomerID, CustomerName
+FROM Customers
+WHERE CustomerID IN (
+SELECT DISTINCT CustomerID
+FROM Orders
+WHERE strftime('%m', OrderDate) IN ('01', '02')
+);
+
+--4 Listar los productos cuyo precio está entre 10 y 50.
+SELECT ProductID, ProductName, Price
+FROM Products
+WHERE Price BETWEEN 10 AND 50;
+
+--5 Obtener los empleados cuyo ID esté entre 3 y 7 y hayan gestionado pedidos.
+SELECT EmployeeID, FirstName, LastName
+FROM Employees
+WHERE EmployeeID BETWEEN 3 AND 7
+AND EmployeeID IN (
+SELECT DISTINCT EmployeeID FROM Orders
+);
+
+--6 Mostrar los proveedores ubicados en 'Germany', 'France' o 'UK'.
+SELECT SupplierID, SupplierName, Country
+FROM Suppliers
+WHERE Country IN ('Germany', 'France', 'UK');
+
+--7 Obtener los productos que pertenecen a las categorías 2, 4 o 6.
+SELECT ProductID, ProductName, CategoryID
+FROM Products
+WHERE CategoryID IN (2, 4, 6);
+
+--8 Listar los clientes cuyo código postal está entre 10000 y 20000.
+SELECT CustomerID, CustomerName, PostalCode
+FROM Customers
+WHERE CAST(PostalCode AS INTEGER) BETWEEN 10000 AND 20000;
+
+--9 Mostrar los productos vendidos en pedidos con ID entre 10250 y 10300.
+SELECT DISTINCT ProductID, ProductName
+FROM Products
+WHERE ProductID IN (
+SELECT DISTINCT ProductID
+FROM OrderDetails
+WHERE OrderID BETWEEN 10250 AND 10300
+);
+
+--10 Obtener los empleados cuyos nombres están en una lista predefinida.
+SELECT EmployeeID, FirstName, LastName
+FROM Employees
+WHERE FirstName IN ('Nancy', 'Andrew', 'Robert', 'Laura');
+
+--Subconsultas con ORDER BY además de lo anterior.
+--1 Listar los clientes con más pedidos, ordenados de mayor a menor.
+SELECT c.CustomerID, c.CustomerName, 
+(SELECT COUNT(o.OrderID) 
+FROM Orders o 
+WHERE o.CustomerID = c.CustomerID) AS TotalPedidos
+FROM Customers c
+ORDER BY TotalPedidos DESC;
+
+--2 Mostrar los productos más caros dentro de cada categoría, ordenados por precio.
+SELECT ProductID, ProductName, CategoryID, Price
+FROM Products
+WHERE Price = (
+SELECT MAX(Price) FROM Products p2 WHERE p2.CategoryID = Products.CategoryID
+)
+ORDER BY Price DESC;
+
+--3 Obtener los empleados con más pedidos gestionados, ordenados de mayor a menor.
+SELECT e.EmployeeID, e.FirstName, e.LastName, 
+(SELECT COUNT(o.OrderID) 
+FROM Orders o 
+WHERE o.EmployeeID = e.EmployeeID) AS TotalPedidos
+FROM Employees e
+ORDER BY TotalPedidos DESC;
+
+
+--4 Listar las categorías con mayor número de productos, ordenadas de mayor a menor.
+SELECT c.CategoryID, c.CategoryName, 
+(SELECT COUNT(p.ProductID) 
+FROM Products p 
+WHERE p.CategoryID = c.CategoryID) AS TotalProductos
+FROM Categories c
+ORDER BY TotalProductos DESC;
+
+
+--5 Mostrar los proveedores con más productos suministrados, ordenados de mayor a menor.
+SELECT s.SupplierID, s.SupplierName, 
+(SELECT COUNT(p.ProductID) 
+FROM Products p 
+WHERE p.SupplierID = s.SupplierID) AS TotalProductos
+FROM Suppliers s
+ORDER BY TotalProductos DESC;
+
+
+--6 Obtener los pedidos más recientes junto con sus clientes.
+SELECT OrderID, CustomerID, OrderDate
+FROM Orders
+ORDER BY OrderDate DESC
+LIMIT 10;
+
+--7 Mostrar los productos con más unidades vendidas, ordenados de mayor a menor.
+SELECT p.ProductID, p.ProductName, 
+(SELECT SUM(od.Quantity) 
+FROM OrderDetails od 
+WHERE od.ProductID = p.ProductID) AS TotalUnidadesVendidas
+FROM Products p
+ORDER BY TotalUnidadesVendidas DESC;
+
+
+--8 Listar los clientes con más pedidos en 'France', ordenados por cantidad de pedidos.
+SELECT c.CustomerID, c.CustomerName, 
+(SELECT COUNT(o.OrderID) 
+FROM Orders o 
+WHERE o.CustomerID = c.CustomerID) AS TotalPedidos
+FROM Customers c
+WHERE c.Country = 'France'
+ORDER BY TotalPedidos DESC;
+
+
+--9 Obtener los empleados con más pedidos en 1997, ordenados por cantidad.
+SELECT e.EmployeeID, e.FirstName, e.LastName, 
+(SELECT COUNT(o.OrderID) 
+FROM Orders o 
+WHERE o.EmployeeID = e.EmployeeID 
+AND strftime('%Y', o.OrderDate) = '1997') AS TotalPedidos
+FROM Employees e
+ORDER BY TotalPedidos DESC;
+
+
+--10 Mostrar las ciudades con más clientes, ordenadas de mayor a menor.
+SELECT City, COUNT(CustomerID) AS TotalClientes
+FROM Customers
+GROUP BY City
+ORDER BY TotalClientes DESC;
+
+
+</sql><current_tab id="0"/></tab_sql></sqlb_project>

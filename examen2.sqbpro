@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/03 Pc Lab 2/Desktop/guissel_sql/lara_sql/nortwin.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2098"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Categories" custom_title="0" dock_id="1" table="4,10:mainCategories"/><dock_state state="000000ff00000000fd00000001000000020000038a00000251fc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000038a0000013200ffffff0000038a0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Categories" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="82"/><column index="2" value="119"/><column index="3" value="300"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">--INNER JOIN con 2 tablas
+--1 Obtener los nombres de los clientes y las fechas de sus pedidos.
+SELECT Customers.CustomerName, Orders.OrderDate
+FROM Customers
+INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+--2 Listar los productos y sus respectivas categorías
+SELECT Products.ProductName, Categories.CategoryName
+FROM Products
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID;
+
+--3 Mostrar los nombres de los empleados y las órdenes que gestionaron.
+SELECT Employees.FirstName, Employees.LastName, Orders.OrderID
+FROM Employees
+INNER JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID;
+
+--4 Obtener los nombres de los productos y los nombres de sus proveedores.
+SELECT Products.ProductName, Suppliers.SupplierName
+FROM Products
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID;
+
+--5 Listar los pedidos y los métodos de envío utilizados.
+SELECT Orders.OrderID, Shippers.ShipperName
+FROM Orders
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--6 Mostrar los detalles de cada pedido y los productos correspondientes.
+SELECT OrderDetails.OrderID, Products.ProductName, OrderDetails.Quantity
+FROM OrderDetails
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID;
+
+--7 Listar los nombres de los clientes junto con los empleados que atendieron sus pedidos.
+SELECT Customers.CustomerName, Employees.FirstName, Employees.LastName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID;	
+
+--8 Obtener el nombre de los empleados y las órdenes que han atendido.
+SELECT Employees.FirstName, Employees.LastName, Orders.OrderID
+FROM Employees
+INNER JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID;
+
+--9 Mostrar los productos y sus respectivas unidades de medida.
+SELECT Products.ProductName, Products.Unit
+FROM Products;
+
+--10 Listar los proveedores y los productos que suministran.
+SELECT Suppliers.SupplierName, Products.ProductName
+FROM Suppliers
+INNER JOIN Products ON Suppliers.SupplierID = Products.SupplierID;
+
+--INNER JOIN con 3 tablas
+--1 Obtener los nombres de los clientes, los pedidos y las fechas en que se realizaron.
+SELECT Customers.CustomerName, Orders.OrderID, Orders.OrderDate
+FROM Customers
+INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+--2 Listar los productos, sus categorías y los proveedores.
+SELECT Products.ProductName, Categories.CategoryName, Suppliers.SupplierName
+FROM Products
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID;
+
+--3 Mostrar los empleados, los pedidos que gestionaron y los clientes correspondientes.
+SELECT Employees.FirstName, Employees.LastName, Orders.OrderID, Customers.CustomerName
+FROM Employees
+INNER JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+
+--4 Obtener los detalles de los pedidos junto con los productos y sus categorías.
+SELECT OrderDetails.OrderID, Products.ProductName, Categories.CategoryName, OrderDetails.Quantity
+FROM OrderDetails
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID;
+
+--5 Listar los pedidos, los clientes y los empleados involucrados.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID;
+
+--6 Mostrar los productos, sus precios y los proveedores que los venden.
+SELECT Products.ProductName, Products.Price, Suppliers.SupplierName
+FROM Products
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID;
+
+--7 Obtener los pedidos, los productos involucrados y sus cantidades.
+SELECT Orders.OrderID, Products.ProductName, OrderDetails.Quantity
+FROM Orders
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID;
+
+--8 Listar los empleados, los pedidos y los métodos de envío.
+SELECT Employees.FirstName, Employees.LastName, Orders.OrderID, Shippers.ShipperName
+FROM Employees
+INNER JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--9 Mostrar los clientes, sus pedidos y los productos que compraron.
+SELECT Customers.CustomerName, Orders.OrderID, Products.ProductName
+FROM Customers
+INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID;
+
+--10 Obtener los pedidos, los productos y las categorías de cada producto.
+SELECT Orders.OrderID, Products.ProductName, Categories.CategoryName
+FROM Orders
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID;
+
+--INNER JOIN con 5 tablas
+--1 Listar los pedidos con la información del cliente, empleado, productos y cantidades.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Products.ProductName, OrderDetails.Quantity
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID;
+
+--2 Obtener los nombres de los productos, sus categorías, proveedores y pedidos en los que
+--se incluyen.
+SELECT Products.ProductName, Categories.CategoryName, Suppliers.SupplierName, Orders.OrderID
+FROM Products
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN OrderDetails ON Products.ProductID = OrderDetails.ProductID
+INNER JOIN Orders ON OrderDetails.OrderID = Orders.OrderID;
+
+--3 Mostrar los pedidos con información del cliente, empleado, transportista y detalles del
+--pedido.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Shippers.ShipperName, OrderDetails.Quantity
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID;
+
+--4 Obtener una lista de pedidos con detalles completos de cliente, empleado y productos.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Products.ProductName, OrderDetails.Quantity
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID;
+
+--5 Mostrar información de pedidos incluyendo datos del producto y la categoría.
+SELECT Orders.OrderID, Products.ProductName, Categories.CategoryName
+FROM Orders
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID;
+
+--6 Listar los clientes, los empleados que gestionaron su pedido, los productos comprados y
+--sus proveedores.
+SELECT Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Products.ProductName, Suppliers.SupplierName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID;
+
+--7 Obtener información de los pedidos con los clientes y los productos vendidos.
+SELECT Orders.OrderID, Customers.CustomerName, Products.ProductName, OrderDetails.Quantity
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID;
+
+--8 Mostrar los pedidos, los clientes y los métodos de envío junto con los productos
+--comprados.
+SELECT Orders.OrderID, Customers.CustomerName, Shippers.ShipperName, Products.ProductName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID;
+
+--9 Obtener una lista de productos con sus categorías, proveedores y detalles en los pedidos.
+SELECT Products.ProductName, Categories.CategoryName, Suppliers.SupplierName, OrderDetails.Quantity
+FROM Products
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN OrderDetails ON Products.ProductID = OrderDetails.ProductID
+INNER JOIN Orders ON OrderDetails.OrderID = Orders.OrderID;
+
+--10 Mostrar los empleados, los pedidos, los clientes, los productos y los métodos de envío.
+SELECT Employees.FirstName, Employees.LastName, Orders.OrderID, Customers.CustomerName, 
+       Products.ProductName, Shippers.ShipperName
+FROM Employees
+INNER JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--INNER JOIN con 8 tablas
+--1 Obtener una lista de pedidos con información completa del cliente, empleado,
+--transportista y productos involucrados.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Shippers.ShipperName, Products.ProductName, Categories.CategoryName, Suppliers.SupplierName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID;
+
+--2 Mostrar los clientes con detalles de sus pedidos y los productos adquiridos, junto con los
+--proveedores.
+SELECT Customers.CustomerName, Orders.OrderID, OrderDetails.Quantity, 
+       Products.ProductName, Suppliers.SupplierName
+FROM Customers
+INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--3 Obtener una vista de los empleados y todos los pedidos que han atendido con detalles
+--completos.
+SELECT Employees.FirstName, Employees.LastName, Orders.OrderID, Customers.CustomerName, 
+       Products.ProductName, OrderDetails.Quantity, Shippers.ShipperName
+FROM Employees
+INNER JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--4 Mostrar los detalles de pedidos incluyendo el cliente, empleado, productos y proveedores.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Products.ProductName, Suppliers.SupplierName, OrderDetails.Quantity
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--5 Listar todos los pedidos con información detallada de clientes, empleados, productos y
+--métodos de envío.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Products.ProductName, Categories.CategoryName, Shippers.ShipperName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--6 Obtener los detalles de pedidos con los productos, proveedores, clientes y empleados
+--involucrados.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Products.ProductName, Suppliers.SupplierName, OrderDetails.Quantity
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--7 Mostrar una lista completa de los pedidos con datos del cliente, empleado, producto,
+--categoría y proveedor.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Products.ProductName, Categories.CategoryName, Suppliers.SupplierName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--8 Listar las órdenes con detalles completos de los clientes, empleados, transportistas,
+--productos y sus categorías.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Shippers.ShipperName, Products.ProductName, Categories.CategoryName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID;
+
+--9 Obtener una vista consolidada de la base de datos con pedidos, clientes, empleados,
+--productos, proveedores y transportistas.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName, Employees.LastName, 
+       Products.ProductName, Suppliers.SupplierName, Shippers.ShipperName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;
+
+--10 Mostrar la relación completa entre órdenes, clientes, empleados, productos,
+--proveedores, transportistas y detalles del pedido.
+SELECT Orders.OrderID, Customers.CustomerName, Employees.FirstName AS EmployeeFirstName, 
+       Employees.LastName AS EmployeeLastName, Shippers.ShipperName, Products.ProductName, 
+       Categories.CategoryName, Suppliers.SupplierName, OrderDetails.Quantity, Products.Price
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+INNER JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID
+INNER JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID;
+
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
